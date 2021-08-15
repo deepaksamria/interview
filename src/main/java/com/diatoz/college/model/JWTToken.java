@@ -11,6 +11,25 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class JWTToken implements Serializable {
     private String jwtToken;
-    private Long userId;
-    private String role;
+    //private Long userId;
+    //private String role;
+
+	public JWTToken(String jwtToken) {
+		super();
+		this.jwtToken = jwtToken;
+	}
+
+	public JWTToken() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getJwtToken() {
+		return jwtToken;
+	}
+
+	public void setJwtToken(String jwtToken) {
+		this.jwtToken = jwtToken;
+	}
+    
 }

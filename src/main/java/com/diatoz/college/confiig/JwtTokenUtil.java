@@ -1,6 +1,6 @@
 package com.diatoz.college.confiig;
 
-import com.diatoz.college.model.UserSession;
+//import com.diatoz.college.model.UserSession;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,15 +42,9 @@ public class JwtTokenUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserSession userSession) {
+    public String generateToken(MyUserDetail myUserDetail) {
         Map<String, Object> claims = new HashMap<>();
-        if (userSession != null) {
-            claims.put("X_PASSWORD", userSession.getPassword());
-            claims.put("X_USER_ID", userSession.getUserId());
-            if (userSession.getUserRole() != null)
-                claims.put(ApplicationContext.X_USER_ROLE, userSession.getUserRole());
-        }
-        return createToken(claims, userSession.getUsername());
+        return createToken(claims, myUserDetail.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -58,7 +52,7 @@ public class JwtTokenUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 ))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }

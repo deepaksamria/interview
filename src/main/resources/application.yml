@@ -8,3 +8,8 @@ spring:
         ddl-auto: update
     properties:
         dialect: org.hibernate.dialect.MySQL8Dialect
+  security:
+    user:
+      name: A12345
+      password: 123456
+      roles: ADMIN   
