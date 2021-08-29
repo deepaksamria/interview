@@ -22,6 +22,9 @@ import com.diatoz.college.model.Student;
 import com.diatoz.college.model.Subjects;
 import com.diatoz.college.service.StudentService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -32,8 +35,10 @@ public class StudentController {
 	public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
 		Student createdStudent = studentService.createStudent(student);
 		if(createdStudent == null) {
+			log.info("Error occured in creating new Student User");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+		log.info("Student User created having name "+createdStudent.getStudentName());
 		return ResponseEntity.of(Optional.of(createdStudent));
 	}
 	
@@ -62,20 +67,22 @@ public class StudentController {
 		if(updatedStudent == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		log.info("Student profile updated who is having ID "+id);
 		return ResponseEntity.of(Optional.of(updatedStudent));
 	}
 	
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Object> deleteStudent(@PathVariable("id") Long id){
 		studentService.deleteStudent(id);
+		log.info("Student profile deleted who is having ID "+id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 	@GetMapping("/marks")
-	public ResponseEntity<List<Subjects>> getMarksInAllSubjects(){
+	public ResponseEntity<Student> getMarksInAllSubjects(){
 		String loggedInUser = JwtRequestFilter.getLoggedInUser();
-		List<Subjects> subjectsOfLoggedInStudent = studentService.getStudentByusername(loggedInUser);
-		return ResponseEntity.of(Optional.of(subjectsOfLoggedInStudent));
+		Student student = studentService.getStudentByusername(loggedInUser);
+		return ResponseEntity.of(Optional.of(student));
 	}
 	
 }

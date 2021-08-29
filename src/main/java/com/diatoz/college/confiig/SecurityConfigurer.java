@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
@@ -40,20 +41,30 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 		auth.userDetailsService(userDetailsService);
 	}
 	
+	public static final String [] swaggerURL = {
+			"/v2/api-docs",
+			"/swagger-resources",
+			"/swagger-ui/**",
+			"/webjars/**",
+			"/configuration/ui",
+			"/configuration/security"
+	};
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authorizeRequests().antMatchers("/userauthenticate").permitAll()
-		.antMatchers("/swagger-ui/**").permitAll()
+		.antMatchers(swaggerURL).permitAll()
 		.antMatchers("/admin/*").hasAuthority("ADMIN")
 		.antMatchers("/teacher/*").hasAnyAuthority("ADMIN" , "TEACHER")
 		.antMatchers("/student/marks").hasAuthority("STUDENT")
 		.antMatchers("/student/*").hasAnyAuthority("ADMIN" , "TEACHER")
 		.anyRequest().authenticated()
 		.and()
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		//http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -66,5 +77,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 		return super.authenticationManagerBean();
 	}
 
+//	@Override
+//	public void configure(WebSecurity web) throws Exception {
+//		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
+//				"/swagger-ui.html", "/webjars/**");
+//	}
 }
 

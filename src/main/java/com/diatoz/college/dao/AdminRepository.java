@@ -9,6 +9,5 @@ import com.diatoz.college.model.Student;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 	public Admin findByAdminId(Long adminId);
-	public Admin deleteByAdminId(Long adminId);
-	
+		
 }

@@ -26,8 +26,9 @@ import com.diatoz.college.service.TeacherService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/teacher")
 @Api("API that handles all Teachers related operations")
@@ -44,8 +45,10 @@ public class TeacherController {
 	public ResponseEntity<Teacher> createTeacher(@Valid @RequestBody Teacher teacher) {
 		Teacher createdTeacher = teacherService.createTeacher(teacher);
 		if(createdTeacher == null) {
+			log.info("Error occured in creating new Teacher User");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+		log.info("Admin User created having name "+createdTeacher.getTeacherName());
 		return ResponseEntity.of(Optional.of(createdTeacher));
 	}
 	
@@ -74,6 +77,7 @@ public class TeacherController {
 		if(updatedTeacher == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		log.info("Teacher profile updated who is having ID "+id);
 		return ResponseEntity.of(Optional.of(updatedTeacher));
 		
 	}
@@ -81,6 +85,7 @@ public class TeacherController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Object> deleteTeacher(@PathVariable("id") Long id){
 		teacherService.deleteTeacher(id);
+		log.info("Teacher profile deleted who is having ID "+id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
@@ -90,8 +95,27 @@ public class TeacherController {
 		if(updatedStudentSubjects.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		log.info("Marks of Student updated who is having id "+id );
 		return ResponseEntity.of(Optional.of(updatedStudentSubjects));
 		
+	}
+	
+	@GetMapping("/getteachercount")
+	public ResponseEntity<?> getTeacherCount(){
+		int teacherCount = teacherService.getTeacherCount();
+		if(teacherCount == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.of(Optional.of(teacherCount));
+	}
+	
+	@GetMapping("/getstudentcount")
+	public ResponseEntity<?> getStudentCount(){
+		int studentCount = studentService.getStudentCount();
+		if(studentCount == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.of(Optional.of(studentCount));
 	}
 	
 }

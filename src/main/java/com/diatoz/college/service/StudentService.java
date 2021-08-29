@@ -17,5 +17,6 @@ public interface StudentService {
 	public Student updateStudent(Student student, Long id);
 	public void deleteStudent(Long id);
 	public List<Subjects> updateStudentMarks(Student student, Long id);
-	public List<Subjects> getStudentByusername(String username);
+	public Student getStudentByusername(String username);
+	public int getStudentCount();
 }

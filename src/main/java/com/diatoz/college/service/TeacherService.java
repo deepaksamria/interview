@@ -14,4 +14,5 @@ public interface TeacherService {
 	public Teacher getTeacherById(Long id);
 	public Teacher updateTeacher(Teacher teacher, Long id);
 	public void deleteTeacher(Long id);
+	public int getTeacherCount();
 }

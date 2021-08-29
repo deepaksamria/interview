@@ -18,6 +18,9 @@ import com.diatoz.college.model.AuthenticationRequest;
 import com.diatoz.college.model.JWTToken;
 import com.diatoz.college.service.MyUserDetailsService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class LoginController {
 	@Autowired
@@ -28,12 +31,6 @@ public class LoginController {
 	
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
-	
-	@GetMapping("/home")
-	public String Hello() {
-		
-		return "Jai Shree Ram";
-	}
 	
 	
 	@PostMapping("/userauthenticate")
@@ -46,6 +43,7 @@ public class LoginController {
 		final MyUserDetail myUserDetails = (MyUserDetail) myUserDetailsService.loadUserByUsername(authenticationRequest.getUserName());
 		final String jwt = jwtTokenUtil.generateToken(myUserDetails);
 		
+		log.info("User authenticated");
 		return ResponseEntity.ok(new JWTToken(jwt));
 		}
 }

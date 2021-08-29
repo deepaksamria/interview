@@ -9,6 +9,5 @@ import com.diatoz.college.model.Users;
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long>{
 	public Teacher findByTeacherId(Long teacherId);
-	public Teacher deleteByTeacherId(Long teacherId);
 
 }

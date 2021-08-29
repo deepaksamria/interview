@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.diatoz.college.dao.TeacherRepository;
 import com.diatoz.college.dao.UserRepository;
+import com.diatoz.college.model.Admin;
 import com.diatoz.college.model.Teacher;
 import com.diatoz.college.model.Users;
 
@@ -62,9 +63,11 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public void deleteTeacher(Long id) {
 		teacherRepository.deleteById(id);
-	}
-	
-	
-	
+		}
 
+	@Override
+	public int getTeacherCount() {
+		List<Teacher> allTeacher = teacherRepository.findAll();
+		return allTeacher.size();
+	}
 }

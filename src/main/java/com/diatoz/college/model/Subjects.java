@@ -17,12 +17,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 @Entity
-@Table(name="Subjects")
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Subjects {
 	
 	@Id
@@ -38,60 +37,4 @@ public class Subjects {
 	
 	@ManyToOne
 	private Student student;
-
-	public int getId() {
-		return subId;
-	}
-
-	public void setId(int id) {
-		this.subId = subId;
-	}
-
-	public String getSubjectName() {
-		return subjectName;
-	}
-
-	public void setSubjectName(String subjectName) {
-		this.subjectName = subjectName;
-	}
-
-	public int getMarks() {
-		return marks;
-	}
-
-	public void setMarks(int marks) {
-		this.marks = marks;
-	}
-
-	public Student getStudent() {
-		return student;
-	}
-
-	public void setStudent(Student student) {
-		this.student = student;
-	}
-
-	public Subjects(int id,
-			@Pattern(regexp = "[a-zA-Z][a-zA-Z\\s]+", message = "Please enter a valid Subject name") @Size(max = 15, message = "Please enter Subject name in less than or equal to 15 alphabet.") String subjectName,
-			@Range(min = 0, max = 100, message = "Please enter marks between 0-100 only") int marks, Student student) {
-		super();
-		this.subId = subId;
-		this.subjectName = subjectName;
-		this.marks = marks;
-		this.student = student;
-	}
-
-	public Subjects() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public String toString() {
-		return "Subjects [subId=" + subId + ", subjectName=" + subjectName + ", marks=" + marks + ", student=" + student + "]";
-	}
-	
-	
-	
-
 }

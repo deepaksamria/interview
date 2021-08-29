@@ -8,7 +8,6 @@ import com.diatoz.college.model.Teacher;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long>{
 	public Student findByStudentId(Long studentId);
-	public Student deleteByStudentId(Long studentId);
 	public Student findByUsername(String username);
 
 }

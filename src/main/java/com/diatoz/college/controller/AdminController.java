@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diatoz.college.model.Admin;
@@ -24,7 +25,10 @@ import com.diatoz.college.service.AdminService;
 import com.diatoz.college.service.StudentService;
 import com.diatoz.college.service.TeacherService;
 
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -39,8 +43,10 @@ public class AdminController {
 	public ResponseEntity<Admin> createAdmin(@Valid @RequestBody Admin admin) {
 		Admin createdadmin = adminService.createAdmin(admin);
 		if(createdadmin == null) {
+			log.info("Error occured in creating new Admin User");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+		log.info("Admin User created having name "+createdadmin.getAdminName());
 		return ResponseEntity.of(Optional.of(createdadmin));
 	}
 	
@@ -53,7 +59,7 @@ public class AdminController {
 		return ResponseEntity.of(Optional.of(allAdmin));
 	}
 	
-	@GetMapping("/getbyid/{id}")
+	@GetMapping("/getlist/{id}")
 	public ResponseEntity<Admin> getAdminById (@PathVariable("id") Long id)
 	{
 		Admin admin = adminService.getAdminById(id);
@@ -69,6 +75,7 @@ public class AdminController {
 		if(updatedAdmin == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
+		log.info("Admin profile updated who is having ID "+id);
 		return ResponseEntity.of(Optional.of(updatedAdmin));
 		
 	}
@@ -76,8 +83,7 @@ public class AdminController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Object> deleteAdmin(@PathVariable("id") Long id){
 		adminService.deleteAdmin(id);
+		log.info("Admin profile deleted who is having ID "+id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-	
-		
 }

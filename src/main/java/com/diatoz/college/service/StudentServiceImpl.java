@@ -1,5 +1,6 @@
 package com.diatoz.college.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.security.auth.Subject;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.diatoz.college.dao.StudentRepository;
+import com.diatoz.college.dao.SubjectsRepository;
 import com.diatoz.college.dao.TeacherRepository;
 import com.diatoz.college.dao.UserRepository;
 import com.diatoz.college.model.Student;
@@ -21,17 +23,26 @@ public class StudentServiceImpl implements StudentService {
 	private StudentRepository studentRepository;
 	
 	@Autowired
+	private SubjectsRepository subjectsReposiory;
+	
+	@Autowired
 	private UserRepository userRepository;
 	
 	@Override
 	public Student createStudent(Student student) {
 		student.setRole("STUDENT");
+		/*List<Subjects> subjects= student.getSubjects();
+		for(Subjects s: subjects) {
+			s.setStudent(student);
+			}*/
+			
 		Student savedStudent = studentRepository.save(student);
 		Users user = new Users();
 		user.setPassword(savedStudent.getPassword());
 		user.setUserName(savedStudent.getUsername());
 		user.setRole(savedStudent.getRole());
 		userRepository.save(user);
+		//subjectsReposiory.saveAll(subjects);	
 		return savedStudent;
 	}
 
@@ -51,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
 		if(studentFromDataBase == null) {
 			return null;
 		}
-		student.setStudentID(id);
+		student.setStudentId(id);
 		student.setRole("STUDENT");
 		student.setUsername(studentFromDataBase.getUsername());
 		
@@ -78,9 +89,14 @@ public class StudentServiceImpl implements StudentService {
 		}
 
 	@Override
-	public List<Subjects> getStudentByusername(String username) {
+	public Student getStudentByusername(String username) {
 		Student loggedInStudent = studentRepository.findByUsername(username);
-		return loggedInStudent.getSubjects();
-		
+		return loggedInStudent;
+	}
+
+	@Override
+	public int getStudentCount() {
+		List<Student> studentList = studentRepository.findAll();
+		return studentList.size();
 	}
 }
